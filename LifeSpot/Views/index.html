@@ -3,46 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <title>LifeSpot</title>
-    <!--Подключение стилей по относительному пути из внешнего файла-->
+    <!--Подключение стилей по отностиельному пути из внешнего файла-->
     <link href="/Static/CSS/index.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/Static/JS/index.js"></script>
 </head>
-<body>
 
-    <!--Хедер страницы находится сразу над тегом body-->
-    <header id="header-index">
-        <!--Заголовок страницы-->
-        <h1>LifeSpot - прямые трансляции с улиц</h1>
-        <!--Параграф-->
-        <p>Покажем, что происходит прямо сейчас</p>
-    </header>
+<!--Хедер страницы находится над тегом body-->
+<header id="header-index">
+    <!--Заголовок страницы-->
+    <h1>LifeSpot - прямые трансляции с улиц</h1>
+    <!--Параграф-->
+    <p>Покажем, что происходит прямо сейчас</p>
 
-    <!--Сайд-бар страницы (пока все ссылки ведут на главную)-->
-    <aside id="sidebar">
-        <div class="navbar">
-            <a href="/"><p>Все трансляции</p></a>
-            <a href="/"><p>О проекте</p></a>
-        </div>
-    </aside>
+    <input type="text" oninput="
+        // Функция объявлена через declaration
+       const inputParseFunction = function(){
+           return document.getElementsByTagName('input')[0].value.toLowerCase();
+       }
+       // Вызов (функция в аргумент передаётся без круглых скобок)
+       filterContent( inputParseFunction )" size=50%>
 
-    <div class="bordered">
-        <!--Добавление поиска-->
-        <form action="/">
-            <input style="width:300px;font-size:16px;font-weight:bold;padding:.5rem;border:.25rem solid lightblue;border-radius:.5rem;" type="text" name="findtext">
-            <input style="width:150px;font-size:16px;font-weight:bold;padding:.5rem;border:.25rem solid lightblue;border-radius:.5rem;" type="submit" value="Найти" size="40">
-        </form><br>
-        <!--Нью-Йорк-->
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/srlpC5tmhYs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        <!--Санкт-Петербург-->
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/wCcMcaiRbhM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        <!--Лондон-->
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/JplMzss6_YE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</header>
+
+<script>
+    // Проверка на возраст
+    checkAge();
+
+    // сохранение сессии
+    handleSession()
+
+    // вывод данных сессии в консоль
+    sessionLog();
+
+    // функция для получения пользовательского ввода
+    const inputParseFunction = function () {
+        return document.getElementsByTagName('input')[0].value.toLowerCase();
+    }
+</script>
+
+
+
+<!--Сайд-бар страницы (пока все ссылки ведут на главную)-->
+<aside id="sidebar">
+    <div class="navbar">
+        <a href="/"><p>Все трансляции</p></a>
+        <a href="/"><p>О проекте</p></a>
     </div>
+</aside>
 
-    <!--Футер страницы находится под основной частью (body)-->
-    <footer>
-        <p>LifeSpot - все права защищены</p>
-        <p>Связаться с нами: contact@lifespot.ru</p>
-    </footer>
-
+<body>
+    <div class="bordered">
+        <div class="video-container">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/srlpC5tmhYs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <h3 class="video-title">Нью-Йорк, Брайант Парк</h3>
+        </div>
+        <div class="video-container">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/srlpC5tmhYs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <h3 class="video-title">>Санкт-Петербург, Невский Проспект</h3>
+        </div>
+        <div class="video-container">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/srlpC5tmhYs" " title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <h3 class="video-title">>Лондон, автобусный маршрут</h3>
+        </div>
+    </div>
 </body>
+
+<!--Футер страницы находится под основной частью (body)-->
+<footer>
+    <p>LifeSpot - видео трансляции</p>
+    <p>Связь с разработчиком: evmorgunov@yahoo.com</p>
+</footer>
 </html>
