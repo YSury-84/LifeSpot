@@ -1,52 +1,110 @@
 using System.IO;
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.FileProviders;
+
 
 namespace LifeSpot
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
+
+            app.UseHttpsRedirection();
+            
+            app.UseStaticFiles(new StaticFileOptions
+             {
+                 FileProvider = new PhysicalFileProvider(
+                Path.Combine(env.ContentRootPath, "Static/IMG/slider")),
+                 RequestPath = "/Static/IMG/slider"
+             });
 
             app.UseRouting();
+           
+            // Р—Р°РіСЂСѓР¶Р°РµРј РѕС‚РґРµР»СЊРЅС‹Рµ СЌР»РµРјРµРЅС‚С‹ РґР»СЏ РІСЃС‚Р°РІРєРё РІ С€Р°Р±Р»РѕРЅ: Р±РѕРєРѕРІРѕРµ РјРёРЅСЋ Рё С„СѓС‚РµСЂ
+            string footerHtml = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Views", "Shared", "footer.html"));
+            string sideBarHtml =  File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Views", "Shared", "sideBar.html"));
+            string sliderHtml = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Views", "Shared", "slider.html"));
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
                 {
                     var viewPath = Path.Combine(Directory.GetCurrentDirectory(), "Views", "index.html");
-                    var html = await File.ReadAllTextAsync(viewPath);
-                    await context.Response.WriteAsync(html);
+                    
+                    // Р—Р°РіСЂСѓР¶Р°РµРј С€Р°Р±Р»РѕРЅ СЃС‚СЂР°РЅРёС†С‹, РІСЃС‚Р°РІР»СЏСЏ РІ РЅРµРіРѕ СЌР»РµРјРµРЅС‚С‹
+                    var html =  new StringBuilder(await File.ReadAllTextAsync(viewPath))
+                        .Replace("<!--SIDEBAR-->", sideBarHtml)
+                        .Replace("<!--FOOTER-->", footerHtml);
+                    
+                    await context.Response.WriteAsync(html.ToString());
                 });
+                
+                endpoints.MapGet("/testing", async context =>
+                {
+                    var viewPath = Path.Combine(Directory.GetCurrentDirectory(), "Views", "testing.html");
+                    
+                    // Р—Р°РіСЂСѓР¶Р°РµРј С€Р°Р±Р»РѕРЅ СЃС‚СЂР°РЅРёС†С‹, РІСЃС‚Р°РІР»СЏСЏ РІ РЅРµРіРѕ СЌР»РµРјРµРЅС‚С‹
+                    var html =  new StringBuilder(await File.ReadAllTextAsync(viewPath))
+                        .Replace("<!--SIDEBAR-->", sideBarHtml)
+                        .Replace("<!--FOOTER-->", footerHtml);
+                    
+                    await context.Response.WriteAsync(html.ToString());
+                });
+                
+                endpoints.MapGet("/about", async context =>
+                {
+                    var viewPath = Path.Combine(Directory.GetCurrentDirectory(), "Views", "about.html");
+
+                    var html = new StringBuilder(await File.ReadAllTextAsync(viewPath))
+                        .Replace("<!--SIDEBAR-->", sideBarHtml)
+                        .Replace("<!--FOOTER-->", footerHtml)
+                        // Р”РѕР±Р°РІРёРј РґР»СЏ Р·Р°РіСЂСѓР·РєРё СЃР»Р°Р№РґРµСЂР°
+                        .Replace("<!--SLIDER-->", sliderHtml);
+
+                    await context.Response.WriteAsync(html.ToString());
+                });
+
                 endpoints.MapGet("/Static/CSS/index.css", async context =>
                 {
-                    // по аналогии со страницей Index настроим на нашем сервере путь до страницы со стилями, чтобы браузер знал, откуда их загружать
-                    var cssPath = Path.Combine(Directory.GetCurrentDirectory(), "Views", "Static", "CSS", "index.css");
+                    var cssPath = Path.Combine(Directory.GetCurrentDirectory(), "Static", "CSS", "index.css");
                     var css = await File.ReadAllTextAsync(cssPath);
                     await context.Response.WriteAsync(css);
                 });
+                
                 endpoints.MapGet("/Static/JS/index.js", async context =>
                 {
-                    // по аналогии со страницей Index настроим на нашем сервере путь до страницы со стилями, чтобы браузер знал, откуда их загружать
-                    var cssPath = Path.Combine(Directory.GetCurrentDirectory(), "Views", "Static", "JS", "index.js");
-                    var css = await File.ReadAllTextAsync(cssPath);
-                    await context.Response.WriteAsync(css);
+                    var jsPath = Path.Combine(Directory.GetCurrentDirectory(), "Static", "JS", "index.js");
+                    var js = await File.ReadAllTextAsync(jsPath);
+                    await context.Response.WriteAsync(js);
                 });
+                
+                endpoints.MapGet("/Static/JS/testing.js", async context =>
+                {
+                    var jsPath = Path.Combine(Directory.GetCurrentDirectory(), "Static", "JS", "testing.js");
+                    var js = await File.ReadAllTextAsync(jsPath);
+                    await context.Response.WriteAsync(js);
+                });
+                
+                endpoints.MapGet("/Static/JS/about.js", async context =>
+                {
+                    var jsPath = Path.Combine(Directory.GetCurrentDirectory(), "Static", "JS", "about.js");
+                    var js = await File.ReadAllTextAsync(jsPath);
+                    await context.Response.WriteAsync(js);
+                });
+
             });
 
         }
